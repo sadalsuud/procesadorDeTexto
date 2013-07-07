@@ -10,11 +10,12 @@ QtCore.Slot = QtCore.pyqtSlot
 
 class VtnBuscar(QtGui.QDialog):
 
-    def __init__(self):
+    # recibe por parametro en el contructor el texto que contiene el archivo 
+    def __init__(self, l=None):
         super(VtnBuscar, self).__init__(parent=None)
         self.ui = uic.loadUi('../share/ui/vtnbuscar.ui', self)
-
-        # se hace referencia a los componentes de la ventana
+        self.l= l 
+         # se hace referencia a los componentes de la ventana
         self.busqueda = self.ui.findChild(QtGui.QLineEdit, "linEdBuscar")
         self.btnBuscar = self.ui.findChild(QtGui.QPushButton, "btnBuscar")
 
@@ -23,7 +24,8 @@ class VtnBuscar(QtGui.QDialog):
 
     @QtCore.Slot()
     def buscar(self):
-        print "buscando"
+        print self.l
+
 
 
 if __name__ == '__main__':

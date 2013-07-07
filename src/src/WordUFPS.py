@@ -4,6 +4,7 @@
 from PyQt4 import uic, QtGui, QtCore
 import vtnBuscar
 import VtnReemplazar
+import ListaCD
 
 QtCore.Signal = QtCore.pyqtSignal
 QtCore.Slot = QtCore.pyqtSlot
@@ -39,7 +40,12 @@ class WordUFPS(QtGui.QMainWindow):
     # decoradores
     @QtCore.Slot()
     def buscar(self):
-        buscar = vtnBuscar.VtnBuscar()
+        contenido = self.textEdit.toPlainText()
+        l = ListaCD.ListaCD([])
+        for i in contenido:
+            l.addFin(str(i))
+        
+        buscar = vtnBuscar.VtnBuscar(l)
         buscar.ui.exec_()
         
     @QtCore.Slot()
