@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt4 import uic, QtGui#, QtCore
+from PyQt4 import uic, QtGui, QtCore
+import vtnBuscar
+import VtnReemplazar
 
-
-# instancia de la listaCD
-# nombre del archivo
+QtCore.Signal = QtCore.pyqtSignal
+QtCore.Slot = QtCore.pyqtSlot
 
 
 # Clase principal del editor, será un wrapper de la ventana a mostrar, en este
@@ -17,67 +18,55 @@ class WordUFPS(QtGui.QMainWindow):
         # cargamos la interfaz gráfica desde el archivo textedito.ui  self.ui es
         # ahora por llamarlo de alguna forma, un puntero al objeto MainWindow.
         self.ui = uic.loadUi('../share/ui/texteditor.ui', self)
-        #referencia al boton buscar
+
+        #referencia a los componentes de la ventana
+        self.textEdit = self.ui.findChild(QtGui.QTextEdit)
         self.boton = self.ui.findChild(QtGui.QPushButton, "pushButton")
+        self.optBuscar = self.ui.findChild(QtGui.QAction, "actionBuscar")
+        self.optReemplazar = self.ui.findChild(QtGui.QAction, "actionReemplazar")
+        self.optSalir = self.ui.findChild(QtGui.QAction, "actionSalir")
+        self.optAbrir = self.ui.findChild(QtGui.QAction, "actionAbrir_archivo")
+        self.optGuardar = self.ui.findChild(QtGui.QAction, "actionGuardar_archivo")
+        
+        # conectando signals y slots
+        self.boton.clicked.connect(self.buscar)
+        self.optBuscar.triggered.connect(self.buscar)
+        self.optReemplazar.triggered.connect(self.reemplazar)
+        self.optSalir.triggered.connect(self.close)
+        self.optAbrir.triggered.connect(self.abrir)
+        self.optGuardar.triggered.connect(self.guardar)
 
-        self.boton.clicked.connect(self.close)
-
-    def showDialog(self):
-        fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file','/home')
-        f = open(fname, 'r')
-        with f:
-            data = f.read()
-            self.textEdit.setText(data)
-""""
-    # conectar señales y slots
-    # elQueEnvia.señal.connect(funcion_slot)
-        self.actionAbrir_archivo.triggered.connect(self.on_actionAbrir_archivo_triggered)
-        self.actionGuardar_archivo.triggered.connect(self.on_actionGuardar_archivo_triggered)
-        self.actionCerrar_archivo.triggered.connect(self.on_actionCerrar_archivo_triggered)
-        self.actionSalir.triggered.connect(self.on_actionSalir_triggered)
-        self.actionBuscar.triggered.connect(self.on_actionBuscar_triggered)
-        self.actionReemplazar.triggered.connect(self.on_actionReemplazar_triggered)
-        self.puschButton.clicked.connect(self.on_puchButton_clicked)
-
-    # abrir archivo
+    # decoradores
     @QtCore.Slot()
-    def on_actionAbrir_archivo_triggered(self):
-        pass
-    # guardar archivo
-
+    def buscar(self):
+        buscar = vtnBuscar.VtnBuscar()
+        buscar.ui.exec_()
+        
     @QtCore.Slot()
-    def on_actionGuardar_archivo_triggered(self):
-        pass
-
-    # cerrar archivo
+    def reemplazar(self):
+        # variable = nombreDelArchivo.NombreDeLaClase
+        reemplazar = VtnReemplazar.VtnReemplazar()
+        reemplazar.ui.exec_()
+    
     @QtCore.Slot()
-    def on_actionCerrar_archivo_triggered(self):
-        pass
-
-    # salir
+    def abrir(self):
+        filename = QtGui.QFileDialog.getOpenFileName(self, 'Abrir archivo', '.')
+        fname = open(filename)
+        data = fname.read()
+        self.textEdit.setText(data)
+        fname.close() 
+        
     @QtCore.Slot()
-    def on_actionSalir_triggered(self):
-        pass
+    def guardar(self):
+        filename = QtGui.QFileDialog.getSaveFileName(self, 'Guardar archivo', '.')
+        fname = open(filename, 'w')
+        fname.write(self.textEdit.toPlainText())
+        fname.close() 
 
-    # buscar
-    @QtCore.Slot()
-    def on_actionBuscartriggered(self):
-        pass
 
-    # Reemplazar
-    @QtCore.Slot()
-    def on_actionReemplazar_triggered(self):
-        pass
-
-    # boton buscar
-    @QtCore.Slot()
-    def on_puchButton_clicked(self):
-        pass
-"""
 
 if __name__ == '__main__':
     app = QtGui.QApplication(["WordUFPSEditor"])
     ProEditor = WordUFPS()
     ProEditor.show()
     app.exec_()
-
