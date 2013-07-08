@@ -11,59 +11,56 @@ class ListaCD(list):
     # constructor que sirve como parametrizado y contructor vacio
     def __init__(self, sequence=[]):
         super(ListaCD, self).__init__(sequence)
-        self.size = len(sequence)
+        self.pos = 0
 
     # Adiciona un Elemento al Inicio de la Lista
     def addInicio(self, dato):
         self.insert(0, dato)
-        self.size += 1
+        self.pos = 0
 
     # Inserta un Elemento al Final de la Lista
     def addFin(self, dato):
         self.append(dato)
-        self.size += 1
+        self.pos = len(self) - 1
 
     # Borra un elemento de la lista dada una posicion
     def remove(self, i):
         self.pop(i)
-        self.size -= 1
+        if i == 0 and self.size == 1:
+            self.pos = 0
+        else:
+            self.pos = i -1
 
     # Retorna el Objeto de la posicion i
     def get(self, i):
+        self.pos = i
         return self[i]
 
     # Borra la lista
     def removeAll(self):
         self.size = 0
         del self[:]
+        self.pos = 0
 
     # Retorna true si la lista esta vacia, false en caso contrario
     def esVacia(self):
-        return self.size == 0
+        return self == []
 
     # Busca un elemento de la lista y devuelve su posicion.
     def indexOf(self, dato):
         return self.index(dato)
+       
+    # Me da el dato y se para en el siguiente
+    def getSig(self, n=1):
+        self.pos = (self.pos + n) % len(self)
+        return self[self.pos]
+        
+    # Me da el dato y se para en el anterior
+    def getAnt(self):
+        i = self.pos
+        self.pos -= 1
+        return self.getSig(i)
 
-    def _not_in_range(self, i):
-        return i < 0 or i >= len(self)
-
-    def set_index(self, i):
-        if self._not_in_range(i):
-            raise IndexError, 'Can\'t set index out of range'
-        else:
-            self.i = i
-
-    def next(self, n=1):
-        if self == []:
-            raise Exception, 'There are no items'
-        if self._not_in_range(self.i):
-            self.i = len(self) - 1
-        self.i = (self.i + n) % len(self)
-        return self[self.i]
-
-    def prev(self, n=1):
-        return self.next(-n)
 
 
 if __name__ == '__main__':
@@ -74,27 +71,7 @@ if __name__ == '__main__':
     class Prueba(unittest.TestCase):
         def setUp(self):
             self.l = ListaCD([1, 2, 3, 15, "www", 'u'])
-        """"
-        def testArrancaDeCero(self):
-            self.assertEqual(self.l.next(), 2)
-        def testTomaElPasoComoParametroOpcional(self):
-            self.assertEqual(self.l.next(4), "www")
-        def testTomaPasoNegativo(self):
-            self.assertEqual(self.l.next(-2), "www")
-        def testTomaPasoQueDaUnParDeVueltas(self):
-            self.assertEqual(self.l.next(8), 3)
-        def testSePortaIgualParaAtrasYParaAdelante(self):
-            self.assertEqual(self.l.prev(), "u")
-        def testIndiceFueraDeRango(self):
-            self.assertRaises(IndexError, self.l.set_index, 8)
-        def testNoItems(self):
-            self.assertRaises(Exception, ListaCD([]).next)
-        def testResizeList(self):
-            '''el indice queda fuera de rango'''
-            self.l.set_index(5)
-            self.l.pop()
-            self.assertEqual(self.l.prev(), 15)
-"""
+        
         def testAddInicio(self):
             aux = [1, 2, 3, 15, "www", 'u']
             self.l.addInicio(3)
@@ -127,4 +104,13 @@ if __name__ == '__main__':
         def testListaVacia(self):
             self.otra = ListaCD([])
             self.assertEqual(self.otra.esVacia(), True)
+        
+        def testGetNext(self):
+            self.assertEqual(self.l.get(5), 'u')
+            self.assertEqual(self.l.getSig(), 1)
+        
+        def testGetAnt(self):
+            self.assertEqual(self.l.get(0), 1)
+            self.assertEqual(self.l.getAnt(), 'u')
+    
     unittest.main()
