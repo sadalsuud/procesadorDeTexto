@@ -3,7 +3,7 @@
 
 # Clase para el manejo de una lista circular doble enlazada
 # @author Daniel Méndez
-# @version 0.1
+# @version 0.2
 
 # hereda de la clase list
 class ListaCD(list):
