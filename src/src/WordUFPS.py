@@ -44,10 +44,8 @@ class WordUFPS(QtGui.QMainWindow):
         l = ListaCD.ListaCD([])
         for i in contenido:
             l.addFin(str(i))
-        buscar = vtnBuscar.VtnBuscar(l)
-        print buscar.getCoincidencias()
+        buscar = vtnBuscar.VtnBuscar(self, l)
         buscar.ui.exec_()
-        
         
     @QtCore.Slot()
     def reemplazar(self):

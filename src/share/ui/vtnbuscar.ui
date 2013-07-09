@@ -52,6 +52,27 @@
     <string>Buscar</string>
    </property>
   </widget>
+  <widget class="QLabel" name="qLbRta">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>201</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Verdana</family>
+     <pointsize>14</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>O coincidencias</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

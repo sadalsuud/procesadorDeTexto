@@ -3,7 +3,7 @@
 
 # Clase para el manejo de una lista circular doble enlazada
 # @author Daniel Méndez
-# @version 0.2
+# @version 0.3
 
 # hereda de la clase list
 class ListaCD(list):
@@ -33,8 +33,13 @@ class ListaCD(list):
 
     # Retorna el Objeto de la posicion i
     def get(self, i):
-        self.pos = i
-        return self[i]
+        self.pos = i % len(self)
+        return self[self.pos]
+        
+    # Modifica el dato en la posición i
+    def set(self, i, dato):
+        self.pos = i % len(self)
+        self[self.pos] = dato
 
     # Borra la lista
     def removeAll(self):
@@ -50,7 +55,7 @@ class ListaCD(list):
     def indexOf(self, dato):
         return self.index(dato)
        
-    # Me da el dato y se para en el siguiente
+    # Me da el dato de la posición siguiente e a la actual
     def getSig(self, n=1):
         self.pos = (self.pos + n) % len(self)
         return self[self.pos]
@@ -71,7 +76,7 @@ if __name__ == '__main__':
     class Prueba(unittest.TestCase):
         def setUp(self):
             self.l = ListaCD([1, 2, 3, 15, "www", 'u'])
-        
+             
         def testAddInicio(self):
             aux = [1, 2, 3, 15, "www", 'u']
             self.l.addInicio(3)
@@ -86,9 +91,14 @@ if __name__ == '__main__':
             aux = [1, 2, 15, "www", 'u']
             self.l.remove(2)
             self.assertEqual(self.l, aux)
-
+        
         def testGet(self):
             self.assertEqual(self.l.get(4), "www")
+            self.assertEqual(self.l.get(8), 3)
+            
+        def testSet(self):
+            self.l.set(4, "http")
+            self.assertEqual(self.l.get(4), "http")
 
         def testRemoveAll(self):
             self.l.removeAll()
